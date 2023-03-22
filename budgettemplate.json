@@ -1,0 +1,81 @@
+{
+  "$schema": "https://schema.management.azure.com/schemas/2019-04-01/deploymentTemplate.json#",
+  "contentVersion": "1.0.0.0",
+  "parameters": {
+    "BudgetAlertStartDate": {
+            "defaultValue": "[utcNow('yyyy-MM-01')]",
+            "type": "String",
+            "metadata": {
+                "description": "The start date must be first of the month in YYYY-MM-DD format. Future start date should not be more than three months."
+            }
+        },
+        "BudgetAlertContactEmails": {
+            "defaultValue": ["test@test.com"],
+            "type": "Array",
+            "metadata": {
+                "description": "The list of email addresses to send the budget notification to when the thresholds are exceeded. Expected as an array."
+            }
+        },
+		"EnableBudgetAlerts": {
+            "type": "string",
+            "defaultValue": "Yes",
+            "allowedValues": [
+                "Yes",
+                "No"
+            ],
+            "metadata": {
+                "description": "Whether or not to enable the default Budget Alerts to notify users via email."
+            }
+        },
+        "BudgetAlertAmount": {
+            "type": "int",
+            "defaultValue": 50,
+            "metadata": {
+                "description": "The total amount of cost or usage to track with the budget"
+            }
+        },
+        "BudgetAlertTimeGrain": {
+            "type": "string",
+            "defaultValue": "Monthly",
+            "allowedValues": [
+                "Monthly",
+                "Quarterly",
+                "Annually"
+            ],
+            "metadata": {
+                "description": "The time covered by a budget. Tracking of the amount will be reset based on the time grain."
+            }
+        }
+  },
+  "variables": {},
+  "resources": [
+    {
+      "type": "Microsoft.Consumption/budgets",
+      "apiVersion": "2021-10-01",
+      "name": "Budget123",
+      "properties": {
+        "timePeriod": {
+          "startDate": "[parameters('BudgetAlertStartDate')]"
+        },
+        "timeGrain": "[parameters('BudgetAlertTimeGrain')]",
+        "amount": "[parameters('BudgetAlertAmount')]",
+        "category": "Cost",
+        "notifications": {
+          "NotificationForExceededBudget1": {
+            "enabled": true,
+            "operator": "GreaterThan",
+            "threshold": 75,
+            "contactEmails": "[parameters('BudgetAlertContactEmails')]"
+          },
+          "NotificationForExceededBudget2": {
+            "enabled": true,
+            "operator": "GreaterThan",
+            "threshold": 100,
+            "contactEmails": "[parameters('BudgetAlertContactEmails')]"
+          }
+        }
+      },
+      "condition": "[equals(parameters('EnableBudgetAlerts'), 'Yes')]"
+    }
+  ]
+}
