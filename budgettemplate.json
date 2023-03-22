@@ -52,7 +52,7 @@
     {
       "type": "Microsoft.Consumption/budgets",
       "apiVersion": "2021-10-01",
-      "name": "Budget123",
+      "name": "DefaultBudget",
       "properties": {
         "timePeriod": {
           "startDate": "[parameters('BudgetAlertStartDate')]"
