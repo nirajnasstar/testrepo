@@ -5,7 +5,7 @@ else { `
 	New-AzResourceGroupDeployment `
    -Name ExampleDeployment `
   -ResourceGroupName td-niraj-ps `
-  -TemplateFile "https://tddevdlkmqn33q5tpu5o.file.core.windows.net/sidkt5iufxmhmazscripts/budgettemplate.json"  
+  -TemplateFile "https://raw.githubusercontent.com/nirajnasstar/testrepo/main/budgettemplate.json"  
 } `
 Write-Output $budgetExists ` 
 $DeploymentScriptOutputs = @{} ` 
